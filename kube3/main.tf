@@ -27,7 +27,7 @@ provider "proxmox" {
 
 # #terraform apply destroy -target=proxmox_vm_qemu.bootstrap
 resource "proxmox_vm_qemu" "bootstrap" {
-  target_node = "makinon2"
+  target_node = group: bind
   name        = "bootstrap"
   pxe         = true
   agent       = 0
@@ -79,7 +79,7 @@ resource "proxmox_vm_qemu" "bootstrap" {
 
 # # #terraform apply destroy -target=proxmox_vm_qemu.master1
 resource "proxmox_vm_qemu" "master1" {
-  target_node = "makinon2"
+  target_node = "makinon3"
   name        = "master1"
   pxe         = true
   onboot      = true
@@ -130,7 +130,7 @@ resource "proxmox_vm_qemu" "master1" {
 
 # # #terraform apply destroy -target=proxmox_vm_qemu.master2
 resource "proxmox_vm_qemu" "master2" {
-  target_node = "makinon2"
+  target_node = "makinon3"
   name        = "master2"
   pxe         = true
   onboot      = true
@@ -180,7 +180,7 @@ resource "proxmox_vm_qemu" "master2" {
 
 # terraform apply destroy -target=proxmox_vm_qemu.master3
 resource "proxmox_vm_qemu" "master3" {
-  target_node = "makinon2"
+  target_node = "makinon3"
   name        = "master3"
   pxe         = true
   onboot      = true
@@ -231,7 +231,7 @@ resource "proxmox_vm_qemu" "master3" {
 
 # terraform apply destroy -target=proxmox_vm_qemu.worker1
 resource "proxmox_vm_qemu" "worker1" {
-  target_node = "makinon2"
+  target_node = "makinon3"
   name        = "worker1"
   pxe         = true
   onboot      = true
@@ -282,7 +282,7 @@ resource "proxmox_vm_qemu" "worker1" {
 
 # terraform apply destroy -target=proxmox_vm_qemu.worker2
 resource "proxmox_vm_qemu" "worker2" {
-  target_node = "makinon2"
+  target_node = "makinon3"
   name        = "worker2"
   pxe         = true
   onboot      = true
@@ -333,7 +333,7 @@ resource "proxmox_vm_qemu" "worker2" {
 
 # terraform apply destroy -target=proxmox_vm_qemu.worker3
 resource "proxmox_vm_qemu" "worker3" {
-  target_node = "makinon2"
+  target_node = "makinon3"
   name        = "worker3"
   pxe         = true
   onboot      = true
@@ -384,7 +384,7 @@ resource "proxmox_vm_qemu" "worker3" {
 
 # terraform apply destroy -target=proxmox_vm_qemu.worker4
 resource "proxmox_vm_qemu" "worker4" {
-  target_node = "makinon2"
+  target_node = "makinon3"
   name        = "worker4"
   pxe         = true
   onboot      = true
