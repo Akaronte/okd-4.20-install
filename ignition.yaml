@@ -51,34 +51,34 @@
 
     - name: Remove bootstrap ISO if it exists
       ansible.builtin.file:
-        path: /root/okd-4.20-install/bootstrap.iso
+        path: /root/bootstrap.iso
         state: absent
 
     - name: Remove master ISO if it exists
       ansible.builtin.file:
-        path: /root/okd-4.20-install/master.iso
+        path: /root/master.iso
         state: absent
 
     - name: Remove worker ISO if it exists
       ansible.builtin.file:
-        path: /root/okd-4.20-install/worker.iso
+        path: /root/worker.iso
         state: absent
 
     - name: Customize CoreOS ISO for bootstrap
       ansible.builtin.command:
-        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --live-karg-append 'nameserver=192.168.103.2' --dest-device /dev/vda --dest-ignition /root/install_dir/bootstrap.ign -o bootstrap.iso /root/okd-4.20-install/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
+        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/bootstrap.ign -o bootstrap.iso /root/okd-4.20-install/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
       args:
         chdir: /root/okd-4.20-install/
 
     - name: Customize CoreOS ISO for master
       ansible.builtin.command:
-        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --live-karg-append 'nameserver=192.168.103.2' --dest-device /dev/vda --dest-ignition /root/install_dir/master.ign -o master.iso /root/okd-4.20-install/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
+        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/master.ign -o master.iso /root/okd-4.20-install/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
       args:
         chdir: /root/okd-4.20-install/
 
     - name: Customize CoreOS ISO for worker
       ansible.builtin.command:
-        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --live-karg-append 'nameserver=192.168.103.2' --dest-device /dev/vda --dest-ignition /root/install_dir/worker.ign -o worker.iso /root/okd-4.20-install/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
+        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/worker.ign -o worker.iso /root/okd-4.20-install/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
       args:
         chdir: /root/okd-4.20-install/
 

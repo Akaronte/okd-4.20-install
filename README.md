@@ -20,4 +20,4 @@ https://console.redhat.com/openshift/downloads download pull secret
 
 tarraform init
 terraform apply -auto-approve
-terraform destroy -auto-aproved
+terraform destroy -auto-aprove
