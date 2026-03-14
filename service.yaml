@@ -53,9 +53,9 @@
         group: bind
         mode: '0640'
 
-    - name: Crear directorio /var/named/
+    - name: Crear directorio /var/cache/bind/
       file:
-        path: /var/named
+        path: /var/cache/bind
         state: directory
         owner: bind
         group: bind
@@ -64,7 +64,7 @@
     - name: Copiar zona directa al directorio named
       copy:
         src: "{{ files_dir }}/kube3.okd.piensoluegoinstalo.com.zone"
-        dest: /var/named/kube3.okd.piensoluegoinstalo.com.zone
+        dest: /var/cache/bind/kube3.okd.piensoluegoinstalo.com.zone
         owner: bind
         group: bind
         mode: '0640'
@@ -72,7 +72,7 @@
     - name: Copiar zona inversa al directorio named
       copy:
         src: "{{ files_dir }}/103.168.192.IN-ADDR.ARPA.zone"
-        dest: /var/named/103.168.192.IN-ADDR.ARPA.zone
+        dest: /var/cache/bind/103.168.192.IN-ADDR.ARPA.zone
         owner: bind
         group: bind
         mode: '0640'
