@@ -37,7 +37,6 @@
       args:
         chdir: /root
 
-    - name: Check if Fedora CoreOS live ISO exists
     - name: Ensure kube3 directory exists
       ansible.builtin.file:
         path: /root/okd-4.20-install/kube3
