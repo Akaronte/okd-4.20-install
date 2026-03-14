@@ -42,7 +42,7 @@
         src: "{{ files_dir }}/named.conf.options"
         dest: /etc/bind/named.conf.options
         owner: root
-        group: named
+        group: bind
         mode: '0640'
 
     - name: Copiar named.conf.default-zones
@@ -50,23 +50,31 @@
         src: "{{ files_dir }}/named.conf.default-zones"
         dest: /etc/bind/named.conf.default-zones
         owner: root
-        group: named
+        group: bind
         mode: '0640'
+
+    - name: Crear directorio /var/named/
+      file:
+        path: /var/named
+        state: directory
+        owner: bind
+        group: bind
+        mode: '0750'
 
     - name: Copiar zona directa al directorio named
       copy:
         src: "{{ files_dir }}/kube3.okd.piensoluegoinstalo.com.zone"
         dest: /var/named/kube3.okd.piensoluegoinstalo.com.zone
-        owner: named
-        group: named
+        owner: bind
+        group: bind
         mode: '0640'
 
     - name: Copiar zona inversa al directorio named
       copy:
         src: "{{ files_dir }}/103.168.192.IN-ADDR.ARPA.zone"
         dest: /var/named/103.168.192.IN-ADDR.ARPA.zone
-        owner: named
-        group: named
+        owner: bind
+        group: bind
         mode: '0640'
 
     - name: Iniciar servicio named
