@@ -38,14 +38,21 @@
         chdir: /root
 
     - name: Check if Fedora CoreOS live ISO exists
+    - name: Ensure kube3 directory exists
+      ansible.builtin.file:
+        path: /root/okd-4.20-install/kube3
+        state: directory
+        mode: '0755'
+
+    - name: Check if Fedora CoreOS live ISO exists
       ansible.builtin.stat:
-        path: /root/okd-4.20-install/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso
+        path: /root/okd-4.20-install/kube3/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso
       register: coreos_iso
 
     - name: Download Fedora CoreOS live ISO
       ansible.builtin.get_url:
-        url: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/43.20260217.3.1/x86_64/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso
-        dest: /root/okd-4.20-install/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso
+        url: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/43.20260217.3.1/x86_64/fedora-coreos-43.20260217.3.1-live.x86_64.iso
+        dest: /root/okd-4.20-install/kube3/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso
         mode: '0644'
       when: not coreos_iso.stat.exists
 
