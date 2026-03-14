@@ -6,6 +6,37 @@
     files_dir: "{{ playbook_dir }}/kube3"
 
   tasks:
+
+    - name: Actualizar caché de apt
+      apt:
+        update_cache: yes
+
+    - name: Instalar bind9, haproxy y git
+      apt:
+        name:
+          - bind9
+          - bind9utils
+          - bind9-doc
+          - haproxy
+          - git
+        state: present
+
+    - name: Instalar software-properties-common
+      apt:
+        name: software-properties-common
+        state: present
+
+    - name: Agregar repositorio PPA de Ansible
+      apt_repository:
+        repo: ppa:ansible/ansible
+        state: present
+        update_cache: yes
+
+    - name: Instalar Ansible
+      apt:
+        name: ansible
+        state: present
+
     - name: Copiar named.conf.options
       copy:
         src: "{{ files_dir }}/named.conf.options"
