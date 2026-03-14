@@ -1,0 +1,91 @@
+---
+- name: Configurar DNS (named) y balanceador de carga (haproxy)
+  hosts: localhost
+  become: yes
+  vars:
+    files_dir: "{{ playbook_dir }}/kube3"
+
+  tasks:
+    - name: Copiar named.conf.options
+      copy:
+        src: "{{ files_dir }}/named.conf.options"
+        dest: /etc/named/named.conf.options
+        owner: root
+        group: named
+        mode: '0640'
+
+    - name: Copiar named.conf.default-zones
+      copy:
+        src: "{{ files_dir }}/named.conf.default-zones"
+        dest: /etc/named/named.conf.default-zones
+        owner: root
+        group: named
+        mode: '0640'
+
+    - name: Copiar zona directa al directorio named
+      copy:
+        src: "{{ files_dir }}/kube3.okd.piensoluegoinstalo.com.zone"
+        dest: /var/named/kube3.okd.piensoluegoinstalo.com.zone
+        owner: named
+        group: named
+        mode: '0640'
+
+    - name: Copiar zona inversa al directorio named
+      copy:
+        src: "{{ files_dir }}/103.168.192.IN-ADDR.ARPA.zone"
+        dest: /var/named/103.168.192.IN-ADDR.ARPA.zone
+        owner: named
+        group: named
+        mode: '0640'
+
+    - name: Iniciar servicio named
+      systemd:
+        name: named
+        state: started
+
+    - name: Verificar estado de named
+      command: systemctl status named
+      register: named_status
+      changed_when: false
+
+    - name: Mostrar estado de named
+      debug:
+        var: named_status.stdout_lines
+
+    - name: Habilitar named al inicio del sistema
+      systemd:
+        name: named
+        enabled: yes
+
+    - name: Copiar configuración de haproxy
+      copy:
+        src: "{{ files_dir }}/haproxy.cfg"
+        dest: /etc/haproxy/haproxy.cfg
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Permitir conexiones arbitrarias en haproxy (SELinux)
+      seboolean:
+        name: haproxy_connect_any
+        state: yes
+        persistent: yes
+
+    - name: Iniciar servicio haproxy
+      systemd:
+        name: haproxy
+        state: started
+
+    - name: Verificar estado de haproxy
+      command: systemctl status haproxy
+      register: haproxy_status
+      changed_when: false
+
+    - name: Mostrar estado de haproxy
+      debug:
+        var: haproxy_status.stdout_lines
+
+    - name: Habilitar haproxy al inicio del sistema
+      systemd:
+        name: haproxy
+        enabled: yes
