@@ -40,7 +40,7 @@
     - name: Copiar named.conf.options
       copy:
         src: "{{ files_dir }}/named.conf.options"
-        dest: /etc/named/named.conf.options
+        dest: /etc/bind/named.conf.options
         owner: root
         group: named
         mode: '0640'
@@ -48,7 +48,7 @@
     - name: Copiar named.conf.default-zones
       copy:
         src: "{{ files_dir }}/named.conf.default-zones"
-        dest: /etc/named/named.conf.default-zones
+        dest: /etc/bind/named.conf.default-zones
         owner: root
         group: named
         mode: '0640'
