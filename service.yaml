@@ -126,3 +126,37 @@
       systemd:
         name: haproxy
         enabled: yes
+
+    - name: Instalar apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: Cambiar puerto de escucha a 8080
+      replace:
+        path: /etc/apache2/ports.conf
+        regexp: '^Listen 80$'
+        replace: 'Listen 8080'
+
+    - name: Permitir contenido de usuario en httpd (SELinux)
+      command: setsebool -P httpd_read_user_content 1
+      when: ansible_selinux.status is defined and ansible_selinux.status == "enabled"
+
+    - name: Iniciar servicio apache2
+      systemd:
+        name: apache2
+        state: started
+
+    - name: Verificar estado de apache2
+      command: systemctl status apache2
+      register: apache2_status
+      changed_when: false
+
+    - name: Mostrar estado de apache2
+      debug:
+        var: apache2_status.stdout_lines
+
+    - name: Habilitar apache2 al inicio del sistema
+      systemd:
+        name: apache2
+        enabled: yes
