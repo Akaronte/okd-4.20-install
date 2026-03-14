@@ -27,7 +27,7 @@ provider "proxmox" {
 
 # #terraform apply destroy -target=proxmox_vm_qemu.bootstrap
 resource "proxmox_vm_qemu" "bootstrap" {
-  target_node = group: bind
+  target_node = "makinon3"
   name        = "bootstrap"
   pxe         = true
   agent       = 0
@@ -41,7 +41,7 @@ resource "proxmox_vm_qemu" "bootstrap" {
     macaddr = "BC:24:11:2C:4B:35"
   }
 
-  cpu         = "host"
+  cpu         = ""
   memory      = 16384
   cores       = 2
   sockets     = 2
