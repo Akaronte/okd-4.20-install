@@ -41,7 +41,6 @@ resource "proxmox_vm_qemu" "bootstrap" {
     macaddr = "BC:24:11:2C:4B:35"
   }
 
-  cpu         = ""
   memory      = 16384
   cores       = 2
   sockets     = 2
