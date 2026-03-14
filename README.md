@@ -6,17 +6,18 @@ apt install software-properties-common -y
 add-apt-repository --yes --update ppa:ansible/ansible
 apt install ansible -y
 
-
 ansible-playbook prepare.yaml
-
-
-cd kube3
 
 
 ansible-playbook ignition.yaml
 
 
+cd kube3
+
+
+https://console.redhat.com/openshift/downloads download pull secret
+
+
+tarraform init
 terraform apply -auto-approve
-
-
 terraform destroy -auto-aproved

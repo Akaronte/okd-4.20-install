@@ -15,6 +15,13 @@ provider "proxmox" {
   pm_password = "mondariz10"
   pm_tls_insecure = true
   pm_debug = true
+  pm_log_enable = true
+  pm_log_file   = "terraform-plugin-proxmox.log"
+  pm_log_levels = {
+    _default    = "debug"
+    _capturelog = ""
+  }
+
 }
 
 # #terraform apply destroy -target=proxmox_vm_qemu.bootstrap
