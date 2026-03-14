@@ -5,7 +5,7 @@ terraform {
       version = "3.0.1-rc8"
     }
   }
-  required_version = ">= 1.2.0"
+  required_version = ">= 1.7.0"
 }
 
 # Configure the Proxmox provider
@@ -14,6 +14,7 @@ provider "proxmox" {
   pm_user = "root@pam"
   pm_password = "mondariz10"
   pm_tls_insecure = true
+  pm_timeout = 1800
   pm_debug = true
   pm_log_enable = true
   pm_log_file   = "terraform-plugin-proxmox.log"
@@ -40,6 +41,7 @@ resource "proxmox_vm_qemu" "bootstrap" {
     macaddr = "BC:24:11:2C:4B:35"
   }
 
+  cpu         = "host"
   memory      = 16384
   cores       = 2
   sockets     = 2
