@@ -105,10 +105,8 @@
         mode: '0644'
 
     - name: Permitir conexiones arbitrarias en haproxy (SELinux)
-      seboolean:
-        name: haproxy_connect_any
-        state: yes
-        persistent: yes
+      command: setsebool -P haproxy_connect_any 1
+      when: ansible_selinux.status is defined and ansible_selinux.status == "enabled"
 
     - name: Iniciar servicio haproxy
       systemd:
