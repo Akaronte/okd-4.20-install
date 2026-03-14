@@ -16,7 +16,7 @@
 
     - name: Copy the install-config.yaml file to the install directory
       ansible.builtin.copy:
-        src: /root/okd-4.20-install/install-config.yaml
+        src: /root/install-config.yaml
         dest: /root/install_dir/install-config.yaml
 
     - name: Run "openshift-install create manifests" command
