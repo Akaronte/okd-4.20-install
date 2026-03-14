@@ -1,0 +1,9 @@
+zone "kube3.okd.piensoluegoinstalo.com" IN {
+        type master;
+        file "kube3.okd.piensoluegoinstalo.com.zone";
+};
+
+zone "103.168.192.IN-ADDR.ARPA" IN {
+        type master;
+        file "103.168.192.IN-ADDR.ARPA.zone";
+};
