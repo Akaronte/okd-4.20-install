@@ -47,7 +47,7 @@
 
     - name: Download Fedora CoreOS live ISO
       ansible.builtin.get_url:
-        url: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/43.20260217.3.1/x86_64/fedora-coreos-43.20260217.3.1-live.x86_64.iso
+        url: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/43.20260217.3.1/x86_64/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso
         dest: "{{ files_dir }}/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso"
         mode: '0644'
       when: not coreos_iso.stat.exists
