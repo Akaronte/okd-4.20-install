@@ -18,9 +18,13 @@ cd kube3
 https://console.redhat.com/openshift/downloads download pull secret
 
 
+
 tarraform init
 terraform apply -auto-approve
 terraform destroy -auto-aprove
 
 
 https://cloud.centos.org/centos/scos/9/prod/streams/latest/x86_64/
+
+
+journalctl -b -u node-image-pull.service
