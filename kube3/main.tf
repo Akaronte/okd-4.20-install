@@ -74,7 +74,7 @@ resource "proxmox_vm_qemu" "bootstrap" {
     delete = "30m"
   }
 
-  efidisk = {
+  efidisk {
     efitype = "4m"
     storage = "local-lvm"
   }
@@ -129,7 +129,7 @@ resource "proxmox_vm_qemu" "master1" {
     delete = "30m"
   }
 
-  efidisk = {
+  efidisk {
     efitype = "4m"
     storage = "local-lvm"
   }
@@ -183,7 +183,7 @@ resource "proxmox_vm_qemu" "master2" {
     delete = "30m"
   }
 
-  efidisk = {
+  efidisk {
     efitype = "4m"
     storage = "local-lvm"
   }
@@ -237,7 +237,7 @@ resource "proxmox_vm_qemu" "master3" {
     delete = "30m"
   }
 
-  efidisk = {
+  efidisk {
     efitype = "4m"
     storage = "local-lvm"
   }
@@ -292,7 +292,7 @@ resource "proxmox_vm_qemu" "worker1" {
     delete = "30m"
   }
 
-  efidisk = {
+  efidisk {
     efitype = "4m"
     storage = "local-lvm"
   }
@@ -347,7 +347,7 @@ resource "proxmox_vm_qemu" "worker2" {
     delete = "30m"
   }
 
-  efidisk = {
+  efidisk {
     efitype = "4m"
     storage = "local-lvm"
   }
@@ -402,7 +402,7 @@ resource "proxmox_vm_qemu" "worker3" {
     delete = "30m"
   }
 
-  efidisk = {
+  efidisk {
     efitype = "4m"
     storage = "local-lvm"
   }
@@ -457,7 +457,7 @@ resource "proxmox_vm_qemu" "worker4" {
     delete = "30m"
   }
 
-  efidisk = {
+  efidisk {
     efitype = "4m"
     storage = "local-lvm"
   }
