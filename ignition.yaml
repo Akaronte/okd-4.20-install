@@ -54,17 +54,17 @@
 
     - name: Remove bootstrap ISO if it exists
       ansible.builtin.file:
-        path: /root/bootstrap.iso
+        path: "{{ files_dir }}/bootstrap.iso"
         state: absent
 
     - name: Remove master ISO if it exists
       ansible.builtin.file:
-        path: /root//master.iso
+        path: "{{ files_dir }}/master.iso"
         state: absent
 
     - name: Remove worker ISO if it exists
       ansible.builtin.file:
-        path: /root/worker.iso
+        path: "{{ files_dir }}/worker.iso"
         state: absent
 
     - name: Customize CoreOS ISO for bootstrap
