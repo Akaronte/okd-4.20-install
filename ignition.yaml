@@ -4,7 +4,7 @@
   become: true
   vars:
     files_dir: "{{ playbook_dir }}"
-  
+
   tasks:
     - name: Remove the install directory if it exists
       ansible.builtin.file:
@@ -42,13 +42,13 @@
 
     - name: Check if Fedora CoreOS live ISO exists
       ansible.builtin.stat:
-        path: /root/okd-4.20-install/scos-9.0.20250510-0-live-iso.x86_64.iso
+        path: "{{ files_dir }}/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso"
       register: coreos_iso
 
     - name: Download Fedora CoreOS live ISO
       ansible.builtin.get_url:
-        url: https://cloud.centos.org/centos/scos/9/prod/streams/latest/x86_64/scos-9.0.20250510-0-live-iso.x86_64.iso
-        dest: /root/okd-4.20-install/scos-9.0.20250510-0-live-iso.x86_64.iso
+        url: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/43.20260217.3.1/x86_64/fedora-coreos-43.20260217.3.1-live.x86_64.iso
+        dest: "{{ files_dir }}/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso"
         mode: '0644'
       when: not coreos_iso.stat.exists
 
@@ -59,7 +59,7 @@
 
     - name: Remove master ISO if it exists
       ansible.builtin.file:
-        path: /root/master.iso
+        path: /root//master.iso
         state: absent
 
     - name: Remove worker ISO if it exists
@@ -69,36 +69,36 @@
 
     - name: Customize CoreOS ISO for bootstrap
       ansible.builtin.command:
-        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/bootstrap.ign -o bootstrap.iso /root/okd-4.20-install/scos-9.0.20250510-0-live-iso.x86_64.iso 
+        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/bootstrap.ign -o bootstrap.iso {{ files_dir }}/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
       args:
-        chdir: /root/okd-4.20-install/
+        chdir: "{{ files_dir }}/"
 
     - name: Customize CoreOS ISO for master
       ansible.builtin.command:
-        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/master.ign -o master.iso /root/okd-4.20-install/scos-9.0.20250510-0-live-iso.x86_64.iso 
+        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/master.ign -o master.iso {{ files_dir }}/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
       args:
-        chdir: /root/okd-4.20-install/
+        chdir: "{{ files_dir }}/"
 
     - name: Customize CoreOS ISO for worker
       ansible.builtin.command:
-        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/worker.ign -o worker.iso /root/okd-4.20-install/scos-9.0.20250510-0-live-iso.x86_64.iso 
+        cmd: coreos-installer iso customize --live-karg-append 'rd.udev=1' --live-karg-append 'ignition.platform.id=qemu' --live-karg-append 'fsck.mode=skip' --dest-device /dev/vda --dest-ignition /root/install_dir/worker.ign -o worker.iso {{ files_dir }}/fedora-coreos-43.20260217.3.1-live-iso.x86_64.iso 
       args:
-        chdir: /root/okd-4.20-install/
+        chdir: "{{ files_dir }}/"
 
     - name: Copy bootstrap ISO to remote server
       ansible.builtin.command:
         cmd: scp -o StrictHostKeyChecking=no bootstrap.iso root@192.168.1.7:/var/lib/vz/template/iso/bootstrap.iso
       args:
-        chdir: /root/okd-4.20-install/
+        chdir: "{{ files_dir }}/"
 
     - name: Copy master ISO to remote server
       ansible.builtin.command:
         cmd: scp -o StrictHostKeyChecking=no master.iso root@192.168.1.7:/var/lib/vz/template/iso/master.iso
       args:
-        chdir: /root/okd-4.20-install/
+        chdir: "{{ files_dir }}/"
 
     - name: Copy worker ISO to remote server
       ansible.builtin.command:
         cmd: scp -o StrictHostKeyChecking=no worker.iso root@192.168.1.7:/var/lib/vz/template/iso/worker.iso
       args:
-        chdir: /root/okd-4.20-install/
+        chdir: "{{ files_dir }}/"

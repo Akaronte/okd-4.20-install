@@ -73,11 +73,6 @@ resource "proxmox_vm_qemu" "bootstrap" {
     update = "30m"
     delete = "30m"
   }
-
-  efidisk {
-    efitype = "4m"
-    storage = "local-lvm"
-  }
 }
 
 
@@ -128,11 +123,8 @@ resource "proxmox_vm_qemu" "master1" {
     update = "30m"
     delete = "30m"
   }
+  
 
-  efidisk {
-    efitype = "4m"
-    storage = "local-lvm"
-  }
 }
 
 # # #terraform apply destroy -target=proxmox_vm_qemu.master2
@@ -183,10 +175,6 @@ resource "proxmox_vm_qemu" "master2" {
     delete = "30m"
   }
 
-  efidisk {
-    efitype = "4m"
-    storage = "local-lvm"
-  }
 }
 
 # terraform apply destroy -target=proxmox_vm_qemu.master3
@@ -237,10 +225,6 @@ resource "proxmox_vm_qemu" "master3" {
     delete = "30m"
   }
 
-  efidisk {
-    efitype = "4m"
-    storage = "local-lvm"
-  }
 }
 
 
@@ -292,10 +276,6 @@ resource "proxmox_vm_qemu" "worker1" {
     delete = "30m"
   }
 
-  efidisk {
-    efitype = "4m"
-    storage = "local-lvm"
-  }
 }
 
 
@@ -347,10 +327,6 @@ resource "proxmox_vm_qemu" "worker2" {
     delete = "30m"
   }
 
-  efidisk {
-    efitype = "4m"
-    storage = "local-lvm"
-  }
 }
 
 
@@ -402,10 +378,6 @@ resource "proxmox_vm_qemu" "worker3" {
     delete = "30m"
   }
 
-  efidisk {
-    efitype = "4m"
-    storage = "local-lvm"
-  }
 }
 
 
@@ -455,11 +427,6 @@ resource "proxmox_vm_qemu" "worker4" {
     create = "30m"
     update = "30m"
     delete = "30m"
-  }
-
-  efidisk {
-    efitype = "4m"
-    storage = "local-lvm"
   }
 
 }
