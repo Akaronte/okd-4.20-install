@@ -1,23 +1,24 @@
 apiVersion: v1
 baseDomain: okd.piensoluegoinstalo.com
-compute:
-- hyperthreading: Enabled
-  name: worker
-  replicas: 0
-controlPlane:
-  hyperthreading: Enabled
-  name: master
-  replicas: 3
 metadata:
   name: kube3
+compute:
+- name: worker
+  replicas: 0
+  hyperthreading: Enabled
+controlPlane:
+  name: master
+  replicas: 3
+  hyperthreading: Enabled
 networking:
+  networkType: OVNKubernetes
   clusterNetwork:
   - cidr: 10.128.0.0/14
     hostPrefix: 23
-  networkType: OVNKubernetes
   serviceNetwork:
   - 172.30.0.0/16
 platform:
   none: {}
-pullsecret: ''
-sshKey: ''
+pullSecret: ''
+sshKey: |
+  ssh-rsa AAAAB3NzaC1...
