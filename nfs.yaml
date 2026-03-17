@@ -1,0 +1,82 @@
+---
+- name: Definir host NFS dinámico
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Agregar host NFS por IP
+      ansible.builtin.add_host:
+        name: nfs_dynamic
+        ansible_host: 192.168.103.99
+        ansible_user: root
+
+- name: Instalar y configurar NFS
+  hosts: nfs_dynamic
+  become: yes
+  tasks:
+    - name: Actualizar caché de paquetes
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Instalar nfs-kernel-server (incluye rpcbind)
+      ansible.builtin.apt:
+        name: nfs-kernel-server
+        state: present
+
+    - name: Habilitar y arrancar nfs-kernel-server
+      ansible.builtin.systemd:
+        name: nfs-kernel-server
+        enabled: yes
+        state: started
+
+    - name: Habilitar y arrancar rpcbind
+      ansible.builtin.systemd:
+        name: rpcbind
+        enabled: yes
+        state: started
+
+    - name: Crear el directorio compartido
+      ansible.builtin.file:
+        path: /var/nfsshare
+        state: directory
+        mode: '0755'
+
+    - name: Configurar exportaciones NFS
+      ansible.builtin.copy:
+        dest: /etc/exports
+        content: |
+          /var/nfsshare 192.168.103.0/24(rw,sync,no_subtree_check)
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Recargar exportaciones NFS
+      ansible.builtin.command: exportfs -ra
+
+- name: Instalar provisionador NFS en OKD
+  hosts: localhost
+  gather_facts: false
+  become: no
+  tasks:
+    - name: Add Helm repo for nfs-subdir-external-provisioner
+      ansible.builtin.command: >
+        helm repo add nfs-subdir-external-provisioner
+        https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+      register: helm_repo_add
+      changed_when: "'has been added' in helm_repo_add.stdout"
+      failed_when: helm_repo_add.rc != 0 and ('already exists' not in helm_repo_add.stderr)
+
+    - name: Update Helm repositories
+      ansible.builtin.command: helm repo update
+
+    - name: Install or upgrade nfs-subdir-external-provisioner via Helm
+      ansible.builtin.command: >
+        helm upgrade --install nfs-provisioner
+        nfs-subdir-external-provisioner/nfs-subdir-external-provisioner
+        --set nfs.server=192.168.103.99
+        --set nfs.path=/var/nfsshare
+        --set storageClass.name=nfs-provisioner
+
+    - name: Patch the storage class to make it default
+      ansible.builtin.command: >
+        oc patch storageclass nfs-provisioner
+        -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'

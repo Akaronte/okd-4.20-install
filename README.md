@@ -28,3 +28,7 @@ https://cloud.centos.org/centos/scos/9/prod/streams/latest/x86_64/
 
 
 journalctl -b -u node-image-pull.service
+
+
+
+api-int.kube3.okd.piensoluegoinstalo.com:22623
