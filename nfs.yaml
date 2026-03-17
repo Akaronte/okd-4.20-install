@@ -6,7 +6,26 @@
     nfs_host_ip: "192.168.103.99"
     nfs_ssh_user: "root"
     nfs_ssh_private_key_file: "/root/.ssh/id_rsa"
+    nfs_ssh_public_key_file: "/root/.ssh/id_rsa.pub"
+    nfs_ssh_bootstrap_user: "root"
+    nfs_ssh_bootstrap_password: ""
   tasks:
+    - name: Copiar clave pública al host destino (ssh-copy-id)
+      ansible.builtin.shell: >
+        sshpass -p '{{ nfs_ssh_bootstrap_password }}'
+        ssh-copy-id -i '{{ nfs_ssh_public_key_file }}'
+        -o StrictHostKeyChecking=no
+        '{{ nfs_ssh_bootstrap_user }}@{{ nfs_host_ip }}'
+      register: ssh_copy_result
+      changed_when: ssh_copy_result.rc == 0
+      no_log: true
+      when: nfs_ssh_bootstrap_password | length > 0
+
+    - name: Aviso si no se ejecuta ssh-copy-id
+      ansible.builtin.debug:
+        msg: "Define nfs_ssh_bootstrap_password para ejecutar ssh-copy-id automáticamente."
+      when: nfs_ssh_bootstrap_password | length == 0
+
     - name: Agregar host NFS por IP
       ansible.builtin.add_host:
         name: nfs_dynamic
