@@ -2,15 +2,21 @@
 - name: Definir host NFS dinámico
   hosts: localhost
   gather_facts: false
+  vars:
+    nfs_host_ip: "192.168.103.99"
+    nfs_ssh_user: "root"
+    nfs_ssh_private_key_file: "/root/.ssh/id_rsa"
   tasks:
     - name: Agregar host NFS por IP
       ansible.builtin.add_host:
         name: nfs_dynamic
-        ansible_host: 192.168.103.99
-        ansible_user: root
+        ansible_host: "{{ nfs_host_ip }}"
+        ansible_user: "{{ nfs_ssh_user }}"
+        ansible_ssh_private_key_file: "{{ nfs_ssh_private_key_file }}"
 
 - name: Instalar y configurar NFS
   hosts: nfs_dynamic
+  gather_facts: false
   become: yes
   tasks:
     - name: Actualizar caché de paquetes
@@ -72,7 +78,7 @@
       ansible.builtin.command: >
         helm upgrade --install nfs-provisioner
         nfs-subdir-external-provisioner/nfs-subdir-external-provisioner
-        --set nfs.server=192.168.103.99
+        --set nfs.server={{ hostvars['localhost']['nfs_host_ip'] }}
         --set nfs.path=/var/nfsshare
         --set storageClass.name=nfs-provisioner
 
