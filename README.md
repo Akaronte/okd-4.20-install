@@ -32,3 +32,71 @@ journalctl -b -u node-image-pull.service
 
 
 api-int.kube3.okd.piensoluegoinstalo.com:22623
+
+
+
+ansible-playbook ignition.yaml
+
+
+ansible-playbook nfs.yaml
+
+
+---
+
+
+
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.9/config/manifests/metallb-native.yaml
+
+
+oc adm policy add-scc-to-group anyuid system:authenticated  -n metallb-system
+
+
+oc adm policy add-scc-to-user privileged  -z speaker -n metallb-system
+
+
+oc adm policy add-scc-to-user anyuid controller -n metallb-system
+
+
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: metallb
+  namespace: metallb-system
+
+
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: defaults-ips
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.103.100-192.168.103.150
+  autoAssign: true
+
+
+cat << EOF | oc apply -f -
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: metallb
+  namespace: metallb-system
+EOF
+
+
+cat << EOF | oc apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: defaults-ips
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.103.100-192.168.103.150
+  autoAssign: true
+EOF
+
+
+oc adm policy add-scc-to-user privileged -n metallb-system -z speaker
+
+arping -I ens19 192.168.103.100

@@ -9,6 +9,7 @@
     nfs_ssh_public_key_file: "/root/.ssh/id_rsa.pub"
     nfs_ssh_bootstrap_user: "root"
     nfs_ssh_bootstrap_password: ""
+    nfs_ssh_password: ""
   tasks:
     - name: Copiar clave pública al host destino (ssh-copy-id)
       ansible.builtin.shell: >
@@ -23,7 +24,10 @@
 
     - name: Aviso si no se ejecuta ssh-copy-id
       ansible.builtin.debug:
-        msg: "Define nfs_ssh_bootstrap_password para ejecutar ssh-copy-id automáticamente."
+        msg: >-
+          No se ejecutó ssh-copy-id. Define nfs_ssh_bootstrap_password (o nfs_ssh_password)
+          si el host aún no acepta tu clave pública, o ajusta nfs_ssh_user si root por SSH
+          está deshabilitado en el servidor destino.
       when: nfs_ssh_bootstrap_password | length == 0
 
     - name: Agregar host NFS por IP
@@ -32,6 +36,8 @@
         ansible_host: "{{ nfs_host_ip }}"
         ansible_user: "{{ nfs_ssh_user }}"
         ansible_ssh_private_key_file: "{{ nfs_ssh_private_key_file }}"
+        ansible_password: "{{ (nfs_ssh_password | default(nfs_ssh_bootstrap_password, true)) if ((nfs_ssh_password | default(nfs_ssh_bootstrap_password, true)) | length > 0) else omit }}"
+        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
 - name: Instalar y configurar NFS
   hosts: nfs_dynamic
