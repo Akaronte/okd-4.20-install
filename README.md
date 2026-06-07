@@ -21,7 +21,7 @@ https://console.redhat.com/openshift/downloads download pull secret
 
 tarraform init
 terraform apply -auto-approve
-terraform destroy -auto-aprove
+terraform destroy -auto-approve
 
 
 https://cloud.centos.org/centos/scos/9/prod/streams/latest/x86_64/
@@ -36,6 +36,11 @@ api-int.kube3.okd.piensoluegoinstalo.com:22623
 
 
 ansible-playbook ignition.yaml
+
+
+cd ~/install_dir
+
+openshift-install wait-for bootstrap-complete --log-level=debug
 
 
 ansible-playbook nfs.yaml
