@@ -42,6 +42,8 @@ cd ~/install_dir
 
 openshift-install wait-for bootstrap-complete --log-level=debug
 
+oc get csr -ojson | jq -r '.items[] | select(.status == {} ) | .metadata.name' | xargs oc adm certificate approve
+
 
 ansible-playbook nfs.yaml
 
